@@ -61,7 +61,7 @@ case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq()
 
 }
 
-trait GetObjectDsl {
+trait GetDsl {
 
   implicit val formats: Formats
 
@@ -77,6 +77,8 @@ trait GetObjectDsl {
 
     def allKeysFrom(indexName: String) = GetAllApiKeyDefinition(indexName = Some(indexName))
 
+    def synonym(synId: String) = GetSynonymDefinition(synId = synId)
+
   }
 
   implicit object GetObjectDefinitionExecutable extends Executable[GetObjectDefinition, GetObject] {
@@ -84,6 +86,7 @@ trait GetObjectDsl {
     override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[GetObject] = {
       (client request[JObject] query.build()).map(GetObject(_))
     }
+
   }
 
   implicit object GetObjectsDefinitionExecutable extends Executable[GetObjectsDefinition, Results] {
@@ -91,6 +94,7 @@ trait GetObjectDsl {
     override def apply(client: AlgoliaClient, query: GetObjectsDefinition)(implicit executor: ExecutionContext): Future[Results] = {
       client request[Results] query.build()
     }
+
   }
 
 }

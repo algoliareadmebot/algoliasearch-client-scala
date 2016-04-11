@@ -50,7 +50,12 @@ class IndexSettingsTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      val payload = HttpPayload(GET, Seq("1", "indexes", "test", "settings"), isSearch = false)
+      val payload = HttpPayload(
+        GET,
+        Seq("1", "indexes", "test", "settings"),
+        Some(Map("getVersion" -> "2")),
+        isSearch = false
+      )
       (settings of "test").build() should be(payload)
     }
 
@@ -96,33 +101,6 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "asc(att8)",
         |    "desc(att9)"
         |  ],
-        |  "synonyms":[
-        |    [
-        |      "black",
-        |      "dark"
-        |    ],
-        |    [
-        |      "small",
-        |      "little",
-        |      "mini"
-        |    ]
-        |  ],
-        |  "placeholders":{
-        |    "<streetnumber>":[
-        |      "1",
-        |      "2",
-        |      "3",
-        |      "4",
-        |      "5"
-        |    ]
-        |  },
-        |  "altCorrections":[
-        |    {
-        |      "word":"foot",
-        |      "correction":"feet",
-        |      "nbTypos":1
-        |    }
-        |  ],
         |  "typoTolerance":"strict"
         |}""".stripMargin
 
@@ -150,9 +128,6 @@ class IndexSettingsTest extends AlgoliaTest {
           CustomRanking.asc("att8"),
           CustomRanking.desc("att9")
         )))
-        i.synonyms should be(Some(Seq(Seq("black", "dark"), Seq("small", "little", "mini"))))
-        i.placeholders should be(Some(Map("<streetnumber>" -> Seq("1", "2", "3", "4", "5"))))
-        i.altCorrections should be(Some(Seq(AltCorrection("foot", "feet", 1))))
         i.typoTolerance should be(Some(TypoTolerance.strict))
       }
 
@@ -177,9 +152,6 @@ class IndexSettingsTest extends AlgoliaTest {
           CustomRanking.asc("att8"),
           CustomRanking.desc("att9")
         )),
-        synonyms = Some(Seq(Seq("black", "dark"), Seq("small", "little", "mini"))),
-        placeholders = Some(Map("<streetnumber>" -> Seq("1", "2", "3", "4", "5"))),
-        altCorrections = Some(Seq(AltCorrection("foot", "feet", 1))),
         typoTolerance = Some(TypoTolerance.strict)
       )
 

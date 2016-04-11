@@ -37,7 +37,12 @@ case class IndexSettingsDefinition(index: String)(implicit val formats: Formats)
   def `with`(settings: IndexSettings) = IndexChangeSettingsDefinition(index, settings)
 
   override private[algolia] def build(): HttpPayload = {
-    HttpPayload(GET, Seq("1", "indexes", index, "settings"), isSearch = false)
+    HttpPayload(
+      GET,
+      Seq("1", "indexes", index, "settings"),
+      queryParameters = Some(Map("getVersion" -> "2")),
+      isSearch = false
+    )
   }
 
 }
